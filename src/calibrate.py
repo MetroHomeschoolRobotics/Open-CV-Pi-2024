@@ -1,7 +1,7 @@
 # This is inteneded to be ran through SSH and operates on its own
 import cv2
 import numpy as np
-
+from picamera2 import Picamera2
 import warnings
 import os
 import datetime
@@ -25,25 +25,26 @@ if __name__ == "__main__":
     charuco_detector = cv2.aruco.CharucoDetector(charuco_board, cv2.aruco.CharucoParameters(), aruco_params)
 
     # Create webcam
-    cap = cv2.VideoCapture(2, cv2.CAP_V4L2)
-
-    # Try to set resolution to really big, OpenCV will fall back to
-    # the camera's highest supported resolution
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1600)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1200)
-    cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
-    cap.set(cv2.CAP_PROP_FPS, 50)
+    picam2 = Picamera2()
+    dispW=1280
+    dispH=800
+    picam2.preview_configuration.main.size = (dispW,dispH)
+    picam2.preview_configuration.main.format = "RGB888"
+    picam2.preview_configuration.controls.FrameRate=120
+    picam2.preview_configuration.align()
+    picam2.configure("preview")
+    picam2.start()
 
     frame_count = 0
     while True:
-        ret, color = cap.read()
+        frame= picam2.capture_array()
 
         frame_count += 1
         if (frame_count % 10 != 1):
             continue
 
         # Convert to grayscale
-        image = cv2.cvtColor(color, cv2.COLOR_BGR2GRAY)
+        image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         if imsize is None:
             imsize = (image.shape[0], image.shape[1])
@@ -100,7 +101,7 @@ if __name__ == "__main__":
         print("Something went wrong when calculating the calibration")
     
     cv2.destroyAllWindows()
-    cap.release()
+    picam2.stop()
 
         
 else:
