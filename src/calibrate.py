@@ -20,7 +20,7 @@ if __name__ == "__main__":
     aruco_params = cv2.aruco.DetectorParameters()
     detector = cv2.aruco.ArucoDetector(aruco_dict, aruco_params)
 
-    square_size_m = 0.13592 / 6
+    square_size_m = 0.0206375
     charuco_board = cv2.aruco.CharucoBoard((12,9), square_size_m, square_size_m * 7/9, aruco_dict) # Different from 6328
     charuco_detector = cv2.aruco.CharucoDetector(charuco_board, cv2.aruco.CharucoParameters(), aruco_params)
 
