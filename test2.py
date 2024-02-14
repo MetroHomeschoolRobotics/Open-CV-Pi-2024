@@ -4,6 +4,10 @@ import libcamera
 import time
 import numpy as np
 import apriltag
+import pickle
+import Util1825AprilTag
+from scipy.spatial.transform import Rotation  
+
 picam2 = Picamera2()
 dispW=640
 dispH=480
@@ -21,7 +25,18 @@ height=1.5
 weight=3
 myColor=(0,0,255)
 detector = apriltag.Detector()
- 
+#loading camera calibration-if you need to recalibrate run CalibrationTest.py
+with open("calibration_result.pkl", "rb") as file:
+    calibration_result=pickle.load(file)
+
+mtx = calibration_result["mtx"]
+dist = calibration_result["dist"]
+rvecs = calibration_result["rvecs"]
+tvecs = calibration_result["tvecs"]
+
+critera = (cv2.TERM_CRITERIA_EPS + cv2.TermCriteria_MAX_ITER, 30, 0.001)
+apriltag.Detector.detect
+print(mtx)
 while True:
     tStart=time.time()
     frame= picam2.capture_array()
@@ -34,28 +49,23 @@ while True:
         for tag in result:
             cv2.polylines(frame, [np.int32(tag.corners)], True, (0,255,0), 2)
             cv2.putText(frame, str(tag.tag_id), tuple(np.int32(tag.corners[0])), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
-             # Calculate the homography matrix
-            # H = tag.homography
             
-            # # Compute the rotation matrix and translation vector from the homography matrix
-            # K = np.array([[1000, 0, 320], [0, 1000, 240], [0, 0, 1]]) # Intrinsic parameters of the camera
-            # [R, T] = cv2.decomposeHomographyMat(H, K)
+            Util1825AprilTag.Util1825AprilTag.distance_to_camera(6.5, 793.70810553, tag.itemsize)
+            #### Modify the angles
+            #print(angles)
 
-            # # Extract the rotation angles from the rotation matrix
-            # angles, _, _ = cv2.RQDecomp3x3(R)
-
+            #angles = dresult[6]
             # # Print the rotation angles
             # print(f"Detected AprilTag ID: {tag.tag_id}")
             # print(f"Rotation angles (degrees): {angles * 180 / np.pi}")
 
             # # Add the angle information to the image box
-            # angle_text = f"Angle: {angles[0][0] * 180 / np.pi:.2f} deg"
-            # cv2.putText(frame, angle_text, tuple(np.int32(tag.corners[0])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
+            angle_text = f"Angle: {angles[0][0]} deg"
+            cv2.putText(frame, angle_text, tuple(np.int32(tag.corners[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
 
             # # Add the tag ID to the image box
-            # id_text = f"ID: {tag.tag_id}"
-            # cv2.putText(frame, id_text, (int(tag.corners[0][0]), int(tag.corners[0][1]) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
-
+            id_text = f"ID: {tag.tag_id}"
+            cv2.putText(frame, id_text, (int(tag.corners[0][0]), int(tag.corners[0][1]) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
 
     cv2.imshow("Camera", frame)
     if cv2.waitKey(1)==ord('q'):

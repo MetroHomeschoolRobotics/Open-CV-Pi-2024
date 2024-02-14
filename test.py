@@ -41,3 +41,25 @@ with Picamera2() as camera:
                 break
 
 cv2.destroyAllWindows()
+
+             # Calculate the homography matrix
+            # H = tag.homography
+            
+            # # Compute the rotation matrix and translation vector from the homography matrix
+            # K = np.array([[1000, 0, 320], [0, 1000, 240], [0, 0, 1]]) # Intrinsic parameters of the camera
+            # [R, T] = cv2.decomposeHomographyMat(H, K)
+
+            # # Extract the rotation angles from the rotation matrix
+            # angles, _, _ = cv2.RQDecomp3x3(R)
+
+            # # Print the rotation angles
+            # print(f"Detected AprilTag ID: {tag.tag_id}")
+            # print(f"Rotation angles (degrees): {angles * 180 / np.pi}")
+
+            # # Add the angle information to the image box
+            # angle_text = f"Angle: {angles[0][0] * 180 / np.pi:.2f} deg"
+            # cv2.putText(frame, angle_text, tuple(np.int32(tag.corners[0])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
+
+            # # Add the tag ID to the image box
+            # id_text = f"ID: {tag.tag_id}"
+            # cv2.putText(frame, id_text, (int(tag.corners[0][0]), int(tag.corners[0][1]) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
