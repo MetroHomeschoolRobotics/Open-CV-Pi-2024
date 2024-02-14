@@ -26,8 +26,8 @@ if __name__ == "__main__":
 
     # Create webcam
     picam2 = Picamera2()
-    dispW=640
-    dispH=400
+    dispW=1280
+    dispH=800
     picam2.preview_configuration.main.size = (dispW,dispH)
     picam2.preview_configuration.main.format = "RGB888"
     picam2.preview_configuration.controls.FrameRate=120

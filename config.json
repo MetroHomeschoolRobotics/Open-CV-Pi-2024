@@ -5,7 +5,7 @@
         "identity": "TagTracker-v2"
     },
     "tag-family": "36h11",
-    "process-threads": 10,
+    "process-threads": 4,
     "cameras": [
         {
             "id": 0,
