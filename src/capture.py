@@ -1,4 +1,5 @@
 import cv2
+from picamera2 import Picamera2
 import threading
 import time
 import queue
@@ -16,7 +17,7 @@ class CameraFrame:
 
 class CameraInputThread(threading.Thread):
     name: str
-    capture: cv2.VideoCapture
+    capture: Picamera2
     frame_queue: queue.PriorityQueue[CameraFrame]
     fps: int
     count: int
@@ -26,14 +27,15 @@ class CameraInputThread(threading.Thread):
     def __init__(self, settings: config.CameraSettings, frame_queue: queue.PriorityQueue[CameraFrame]):
         threading.Thread.__init__(self)
         self.name = settings.name
-
+        self.capture = Picamera2()
         # TODO: Make configurable again
-        self.capture = cv2.VideoCapture(settings.id, cv2.CAP_V4L2)
-        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1600)
-        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 1200)
-        self.capture.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
-        self.capture.set(cv2.CAP_PROP_FPS, 50)
-        
+        #self.capture = cv2.VideoCapture(settings.id, cv2.CAP_V4L2)
+        self.capture.preview_configuration.main.size = (640,400)
+        self.capture.preview_configuration.main.format = "RGB888"
+        self.capture.preview_configuration.controls.FrameRate=120
+        self.capture.preview_configuration.align()
+        self.capture.configure("preview")
+        self.capture.start()
 #        if isinstance(settings.id, str):
 #            device_path = settings.id
 #        else:
@@ -63,8 +65,8 @@ class CameraInputThread(threading.Thread):
         print(self.name, "starting capture", )
         while self.running:
             timestamp = time.time()
-            retval, image = self.capture.read()
-            if retval:
+            image = self.capture.capture_array()
+            if image is not None:
                 self.count += 1
                 # Use while in case a frame took over 1 second
                 while time.time() - self.prev_time > 1:
@@ -84,5 +86,5 @@ class CameraInputThread(threading.Thread):
                 print(self.name, "did not receive image")
                 time.sleep(0.2)
 
-        self.capture.release()
+        self.capture.stop()
         print(self.name, "stopped capture")

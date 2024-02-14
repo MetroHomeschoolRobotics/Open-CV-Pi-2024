@@ -8,12 +8,12 @@
     "process-threads": 10,
     "cameras": [
         {
-            "id": 2,
-            "name": "usb1",
+            "id": 0,
+            "name": "ov9281",
             "auto-exposure": 1,
             "exposure": 25,
             "gain": 25,
-            "calibration": "calibrations/arducam.json"
+            "calibration": "calibrations/ov9281_calibration.json"
         }
     ],
     "web-stream": {
