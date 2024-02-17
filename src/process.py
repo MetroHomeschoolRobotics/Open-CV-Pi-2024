@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 
 import capture
 import config
-import detect
+import detect2 as detect
 import solve
 
 @dataclass
