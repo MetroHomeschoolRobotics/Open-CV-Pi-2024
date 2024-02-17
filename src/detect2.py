@@ -12,7 +12,7 @@ class DetectedTag:
 
 class TagDetector:
     def __init__(self, aruco_dict: int):
-        params = apriltag.DetectorOptions(config.TagTrackerConfig.tag_family)
+        #params = apriltag.DetectorOptions(config.TagTrackerConfig.tag_family)
         self.detector = apriltag.Detector()
 
     def detect(self, image) -> list[DetectedTag]:

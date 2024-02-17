@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from wpimath.geometry import *
 
 import config
-import detect2 as detect
+import detect
 
 @dataclass
 class EstimatePair:
