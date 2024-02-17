@@ -11,12 +11,13 @@ class DetectedTag:
     corners: numpy.typing.NDArray[numpy.float64]
 
 class TagDetector:
-    def __init__(self, aruco_dict: int):
+    def __init__(self):
         #params = apriltag.DetectorOptions(config.TagTrackerConfig.tag_family)
         self.detector = apriltag.Detector()
 
     def detect(self, image) -> list[DetectedTag]:
-        tags = self.detector.detect(image)
+        detector = apriltag.Detector()
+        tags = detector.detect(image)
         # corners, ids, _ = cv2.aruco.detectMarkers(image, self.dict, parameters=self.params)
         if len(tags) == 0:
             return []

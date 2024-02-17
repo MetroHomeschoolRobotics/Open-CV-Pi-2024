@@ -49,7 +49,7 @@ def main():
         threads.append(capture.CameraInputThread(camera_config, frame_queue))
 
     for _ in range(0, conf.process_threads):
-        threads.append(process.TagProcessThread(dict, conf.environment, frame_queue, result_queue))
+        threads.append(process.TagProcessThread(conf.environment, frame_queue, result_queue))
 
     stream = web_stream.StreamServer(conf.stream)
     stream.start()

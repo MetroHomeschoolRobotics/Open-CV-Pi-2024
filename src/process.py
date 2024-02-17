@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 
 import capture
 import config
-import detect
+import detect2 as detect
 import solve
 
 @dataclass
@@ -29,11 +29,11 @@ class TagProcessThread(threading.Thread):
     estimator: solve.PoseEstimator
     running: bool
 
-    def __init__(self, aruco_dict: int, env: config.TagEnvironment, frame_queue: queue.PriorityQueue[capture.CameraFrame], result_queue: queue.PriorityQueue[FrameResult]):
+    def __init__(self, env: config.TagEnvironment, frame_queue: queue.PriorityQueue[capture.CameraFrame], result_queue: queue.PriorityQueue[FrameResult]):
         threading.Thread.__init__(self)
         self.frame_queue = frame_queue
         self.result_queue = result_queue
-        self.detector = detect.TagDetector(aruco_dict)
+        self.detector = detect.TagDetector()
         self.estimator = solve.PoseEstimator(env)
         self.running = True
 
