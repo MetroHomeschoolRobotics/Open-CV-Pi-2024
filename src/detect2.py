@@ -17,9 +17,10 @@ class TagDetector:
 
     def detect(self, image) -> list[DetectedTag]:
         detector = apriltag.Detector()
-        tags = detector.detect(image)
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        tags = detector.detect(gray)
         # corners, ids, _ = cv2.aruco.detectMarkers(image, self.dict, parameters=self.params)
         if len(tags) == 0:
             return []
             
-        return [DetectedTag(tag.tag_id, tag.corner) for tag in tags]
+        return [DetectedTag(tag.tag_id, tag.corners) for tag in tags]

@@ -66,6 +66,7 @@ class CameraInputThread(threading.Thread):
         while self.running:
             timestamp = time.time()
             image = self.capture.capture_array()
+
             if image is not None:
                 self.count += 1
                 # Use while in case a frame took over 1 second
