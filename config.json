@@ -1,7 +1,7 @@
 {
-    "environment": "environment.json",
+    "environment": "crescendo_field.json",
     "networktables": {
-        "server-ip": "localhost",
+        "server-ip": "roboRIO-1825-FRC.local",
         "identity": "TagTracker-v2"
     },
     "tag-family": "36h11",

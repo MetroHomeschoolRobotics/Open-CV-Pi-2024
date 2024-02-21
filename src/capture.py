@@ -30,7 +30,7 @@ class CameraInputThread(threading.Thread):
         self.capture = Picamera2()
         # TODO: Make configurable again
         #self.capture = cv2.VideoCapture(settings.id, cv2.CAP_V4L2)
-        self.capture.preview_configuration.main.size = (640,400)
+        self.capture.preview_configuration.main.size = (640,480)
         self.capture.preview_configuration.main.format = "RGB888"
         self.capture.preview_configuration.controls.FrameRate=60
         self.capture.preview_configuration.align()
